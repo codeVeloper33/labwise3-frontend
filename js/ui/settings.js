@@ -22,12 +22,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     badgeEl.textContent = names[user.tier] || 'Free';
     badgeEl.className   = `profile-tier-badge tier-${user.tier || 'free'}`;
   }
-   
-   currentTheme = opt.dataset.theme;
-   await UserApi.updateSettings({ theme: currentTheme });
-   const updatedUser = { ...Storage.getUser(), theme: currentTheme };
-   Storage.setUser(updatedUser);
-   Storage.applyTheme();
+
+  /* ── Theme ── */
+  let currentTheme = user.theme || 'dark';
+
+  /* Set active button based on saved theme */
+  document.querySelectorAll('.theme-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.theme === currentTheme);
+  });
+
+  /* Apply theme on load */
+  applyThemeToPage(currentTheme);
+
+  document.querySelectorAll('.theme-option').forEach(opt => {
+    opt.addEventListener('click', async () => {
+      document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      currentTheme = opt.dataset.theme;
+
+      /* Apply immediately */
+      applyThemeToPage(currentTheme);
+
+      /* Save to localStorage */
+      const updatedUser = { ...Storage.getUser(), theme: currentTheme };
+      Storage.setUser(updatedUser);
+
+      /* Save to backend */
+      await UserApi.updateSettings({ theme: currentTheme });
+    });
+  });
 
   /* ── Auto login toggle ── */
   const autoToggle = document.getElementById('auto-login-toggle');
@@ -43,7 +66,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     ?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const newEmail = document.getElementById('new-email')?.value.trim();
-      const msgEl    = document.getElementById('email-msg');
 
       if (!newEmail || !Validator.isValidEmail(newEmail)) {
         showMsg('email-msg', 'Enter a valid email address.', 'error');
@@ -92,6 +114,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
+/* ── Apply theme to current page ── */
+function applyThemeToPage(theme) {
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else if (theme === 'system') {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+}
+
 function setText(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val ?? '';
@@ -104,4 +138,4 @@ function showMsg(id, msg, type) {
   el.className = type === 'success' ? 'form-success' : 'form-error';
   el.classList.remove('hidden');
   setTimeout(() => el.classList.add('hidden'), 4000);
-}
+                }

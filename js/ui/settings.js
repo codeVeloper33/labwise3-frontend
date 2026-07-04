@@ -22,18 +22,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     badgeEl.textContent = names[user.tier] || 'Free';
     badgeEl.className   = `profile-tier-badge tier-${user.tier || 'free'}`;
   }
-
-  /* ── Theme ── */
-  let currentTheme = user.theme || 'dark';
-  document.querySelectorAll('.theme-option').forEach(opt => {
-    if (opt.dataset.theme === currentTheme) opt.classList.add('active');
-    opt.addEventListener('click', async () => {
-      document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
-      opt.classList.add('active');
-      currentTheme = opt.dataset.theme;
-      await UserApi.updateSettings({ theme: currentTheme });
-    });
-  });
+   
+   currentTheme = opt.dataset.theme;
+   await UserApi.updateSettings({ theme: currentTheme });
+   const updatedUser = { ...Storage.getUser(), theme: currentTheme };
+   Storage.setUser(updatedUser);
+   Storage.applyTheme();
 
   /* ── Auto login toggle ── */
   const autoToggle = document.getElementById('auto-login-toggle');

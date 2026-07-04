@@ -253,4 +253,4 @@ input:disabled, select:disabled { opacity: 0.5; cursor: not-allowed; }
 @media (max-width: 700px) {
   .page-header  { padding: 20px 16px 0; }
   .page-content { padding: 16px 16px 40px; }
-             }
+              }

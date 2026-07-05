@@ -15,16 +15,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const user     = meRes.data.data.user;
   const tierInfo = meRes.data.data.tier_info;
-
   Storage.setUser(user);
 
-  /* ── Profile avatar ── */
+  /* ── Avatar ── */
   loadAvatar(user);
 
-  /* ── Avatar upload ── */
-  const editBtn    = document.getElementById('avatar-edit-btn');
-  const fileInput  = document.getElementById('avatar-input');
-  const avatarMsg  = document.getElementById('avatar-msg');
+  const editBtn   = document.getElementById('avatar-edit-btn');
+  const fileInput = document.getElementById('avatar-input');
+  const avatarMsg = document.getElementById('avatar-msg');
 
   editBtn?.addEventListener('click', () => fileInput?.click());
 
@@ -33,70 +31,81 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      avatarMsg.textContent = '❌ File too large. Max 2MB.';
+      if (avatarMsg) avatarMsg.textContent = '❌ File too large. Max 2MB.';
       return;
     }
 
-    avatarMsg.textContent = '⏳ Uploading...';
+    if (avatarMsg) avatarMsg.textContent = '⏳ Uploading...';
 
-    const formData = new FormData();
-    formData.append('avatar', file);
+    const controller = new AbortController();
+    const timeout    = setTimeout(() => controller.abort(), 30000);
 
-    const token = Storage.getToken();
-    const res = await fetch('https://codeveloper.pythonanywhere.com/api/users/me/avatar', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}` },
-      body: formData,
-    });
+    try {
+      const token    = Storage.getToken();
+      const formData = new FormData();
+      formData.append('avatar', file);
 
-    const data = await res.json();
+      const res = await fetch(
+        'https://codeveloper.pythonanywhere.com/api/users/me/avatar',
+        {
+          method:  'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body:    formData,
+          signal:  controller.signal,
+        }
+      );
+      clearTimeout(timeout);
 
-    if (!res.ok) {
-      avatarMsg.textContent = `❌ ${data.error || 'Upload failed'}`;
-      return;
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (avatarMsg) avatarMsg.textContent = `❌ ${data.error || 'Upload failed'}`;
+        return;
+      }
+
+      const avatarUrl = data.data.avatar_url;
+      if (avatarMsg) avatarMsg.textContent = '✅ Photo updated!';
+      const updatedUser = { ...Storage.getUser(), avatar_url: avatarUrl };
+      Storage.setUser(updatedUser);
+      showAvatarImage(avatarUrl);
+      Sidebar.refresh();
+      setTimeout(() => { if (avatarMsg) avatarMsg.textContent = ''; }, 3000);
+
+    } catch (err) {
+      clearTimeout(timeout);
+      if (avatarMsg) {
+        avatarMsg.textContent = err.name === 'AbortError'
+          ? '❌ Upload timed out. Try a smaller image.'
+          : '❌ Upload failed. Check your connection.';
+      }
     }
-
-    avatarMsg.textContent = '✅ Photo updated!';
-    const avatarUrl = data.data.avatar_url;
-
-    /* Update localStorage */
-    const updatedUser = { ...Storage.getUser(), avatar_url: avatarUrl };
-    Storage.setUser(updatedUser);
-
-    /* Show new avatar */
-    showAvatarImage(avatarUrl);
-
-    /* Update sidebar */
-    Sidebar.refresh();
-
-    setTimeout(() => { avatarMsg.textContent = ''; }, 3000);
+    fileInput.value = '';
   });
 
   /* ── Profile card ── */
-  setText('profile-name',   user.username);
-  setText('profile-email',  user.email);
+  setText('profile-name',  user.username);
+  setText('profile-email', user.email);
 
-  const tierNames = {
-    free:'Free', tier1:'Tier 1 — Basic',
-    tier2:'Tier 2 — Standard', tier3:'Tier 3 — Premium'
-  };
+  const tierNames = { free:'Free', tier1:'Tier 1 — Basic', tier2:'Tier 2 — Standard', tier3:'Tier 3 — Premium' };
   const badgeEl = document.getElementById('profile-tier-badge');
   if (badgeEl) {
     badgeEl.textContent = tierNames[user.tier] || 'Free';
     badgeEl.className   = `profile-tier-badge tier-${user.tier || 'free'}`;
   }
 
+  if (user.tier === 'tier3') {
+    document.querySelector('a[href="upgrade.html"]')?.remove();
+  }
+
   setText('stat-joined',         formatDate(user.created_at));
   setText('stat-sessions-month', user.sessions_this_month ?? 0);
   setText('stat-sessions-limit', tierInfo?.sessions_per_month ?? 2);
 
-  /* ── Account info panel ── */
   setText('info-username', user.username);
   setText('info-email',    user.email);
   setText('info-phone',    user.phone || 'Not set');
   setText('info-verified', user.is_verified ? '✅ Verified' : '❌ Not verified');
 
-  /* ── Sessions list ── */
   const sessions  = sessRes.ok ? (sessRes.data.data.sessions || []) : [];
   const completed = sessions.filter(s => s.status === 'completed').length;
   setText('stat-total-completed', completed);
@@ -111,11 +120,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     sessions.slice(0, 6).forEach(s => {
       const row = document.createElement('div');
       row.className = 'session-row';
+      row.style.cursor = 'pointer';
       row.innerHTML = `
         <div class="session-row-left">
-          <div class="session-icon ${s.experiment_name}">
-            ${expIcon(s.experiment_name)}
-          </div>
+          <div class="session-icon">${expIcon(s.experiment_name)}</div>
           <div>
             <div class="session-title">${s.experiment_title || s.experiment_name}</div>
             <div class="session-date">${formatDate(s.created_at)}</div>
@@ -128,42 +136,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       row.addEventListener('click', () => {
         Storage.setLabSession(s);
         Storage.setExperiment(s.experiment_name);
-        s.status === 'completed' ? Router.graph() : Router.lab();
+        window.location.href = s.status === 'completed' ? 'results.html' : 'lab.html';
       });
       listEl?.appendChild(row);
     });
   }
 });
 
-/* ── Avatar helpers ── */
 function loadAvatar(user) {
-  if (user.avatar_url) {
-    showAvatarImage(user.avatar_url);
-  } else {
-    const initial = (user.username || 'U').charAt(0).toUpperCase();
-    setText('profile-avatar', initial);
-  }
+  if (user.avatar_url) { showAvatarImage(user.avatar_url); return; }
+  const el = document.getElementById('profile-avatar');
+  if (el) el.textContent = (user.username || 'U').charAt(0).toUpperCase();
 }
-
 function showAvatarImage(url) {
-  const img     = document.getElementById('profile-avatar-img');
-  const initial = document.getElementById('profile-avatar');
-  if (img) {
-    img.src = url;
-    img.classList.remove('hidden');
-  }
-  if (initial) initial.classList.add('hidden');
+  const img = document.getElementById('profile-avatar-img');
+  const ini = document.getElementById('profile-avatar');
+  if (img) { img.src = url; img.classList.remove('hidden'); }
+  if (ini) ini.classList.add('hidden');
 }
-
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val ?? '';
-}
-function expIcon(name) {
-  return { pendulum:'🔵', hookes:'🟢', moments:'🟡' }[name] || '⚗️';
-}
+function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val ?? ''; }
+function expIcon(n) { return { pendulum:'🔵', hookes:'🟢', moments:'🟡' }[n] || '⚗️'; }
 function formatDate(iso) {
   if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('en-GB',
-    { day:'2-digit', month:'short', year:'numeric' });
-          }
+  return new Date(iso).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+                          }
+         

@@ -1,6 +1,5 @@
 /* ============================================================
    LabWise — authApi.js
-   Handles all HTTP calls to /api/auth/* endpoints.
    ============================================================ */
 
 const AuthApi = (() => {
@@ -21,30 +20,35 @@ const AuthApi = (() => {
     }
   }
 
-  async function signup(username, email, phone, password) {
-    return _post('/signup', { username, email, phone, password });
+  async function signup(username, email, password) {
+    return _post('/signup', { username, email, password });
   }
-
   async function verify(email, code) {
     return _post('/verify', { email, code });
   }
-
   async function resendCode(email) {
     return _post('/resend-code', { email });
   }
-
   async function login(email, password) {
     return _post('/login', { email, password });
   }
-
+  async function loginVerify(email, code) {
+    return _post('/login-verify', { email, code });
+  }
+  async function loginResend(email) {
+    return _post('/login-resend', { email });
+  }
   async function forgotPassword(email) {
     return _post('/forgot-password', { email });
   }
-
   async function resetPassword(email, code, newPassword) {
     return _post('/reset-password', { email, code, new_password: newPassword });
   }
 
-  return { signup, verify, resendCode, login, forgotPassword, resetPassword };
+  return {
+    signup, verify, resendCode,
+    login, loginVerify, loginResend,
+    forgotPassword, resetPassword,
+  };
 
 })();

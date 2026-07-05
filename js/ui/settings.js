@@ -14,6 +14,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /* ── Profile card ── */
   setText('profile-avatar', (user.username || 'U').charAt(0).toUpperCase());
+ const avatarEl = document.getElementById('profile-avatar');
+if (avatarEl) {
+  if (user.avatar_url) {
+    avatarEl.innerHTML = `<img src="${user.avatar_url}" alt="avatar"
+      style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  } else {
+    avatarEl.textContent = (user.username || 'U').charAt(0).toUpperCase();
+  }
+}
   setText('profile-name',   user.username);
   setText('profile-email',  user.email);
   const badgeEl = document.getElementById('profile-tier-badge');

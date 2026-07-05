@@ -1,76 +1,121 @@
 /* ============================================================
-   LabWise — login.js
-   Login page controller.
+   LabWise — login.js  (2-step OTP)
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (Storage.isLoggedIn()) { Router.dashboard(); return; }
 
-  // Redirect if already logged in
-  if (!Storage.requireGuest()) return;
+  const loginFormWrap = document.getElementById('login-form-wrap');
+  const otpFormWrap   = document.getElementById('otp-form-wrap');
+  const loginBtn      = document.getElementById('login-btn');
+  const otpBtn        = document.getElementById('otp-btn');
+  const formError     = document.getElementById('form-error');
+  const otpError      = document.getElementById('otp-error');
+  const otpEmailEl    = document.getElementById('otp-email-display');
+  const resendBtn     = document.getElementById('resend-otp-btn');
 
-  const form         = document.getElementById('login-form');
-  const togglePwdBtn = document.getElementById('toggle-password');
-  const passwordEl   = document.getElementById('password');
+  let pendingEmail = '';
 
-  // ── Toggle password visibility ──────────────────────────────
-  togglePwdBtn?.addEventListener('click', () => {
-    const isText = passwordEl.type === 'text';
-    passwordEl.type = isText ? 'password' : 'text';
-    togglePwdBtn.textContent = isText ? '👁️' : '🙈';
-  });
+  document.getElementById('toggle-password')
+    ?.addEventListener('click', () => {
+      const input = document.getElementById('password');
+      input.type  = input.type === 'password' ? 'text' : 'password';
+    });
 
-  // ── Form submit ─────────────────────────────────────────────
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  /* ── Step 1: Submit email + password ── */
+  document.getElementById('login-form')
+    ?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
 
-    const email    = document.getElementById('email').value.trim();
-    const password = passwordEl.value;
-
-    // Clear previous errors
-    Validator.clearAll(['email', 'password']);
-    Validator.clearFormError('form-error');
-
-    // Validate
-    let hasError = false;
-
-    if (!email) {
-      Validator.showError('email', 'Email is required');
-      hasError = true;
-    } else if (!Validator.isValidEmail(email)) {
-      Validator.showError('email', 'Enter a valid email address');
-      hasError = true;
-    }
-
-    if (!password) {
-      Validator.showError('password', 'Password is required');
-      hasError = true;
-    }
-
-    if (hasError) return;
-
-    // Submit
-    Validator.setLoading('login-btn', true);
-
-    const res = await AuthApi.login(email, password);
-
-    Validator.setLoading('login-btn', false);
-
-    if (!res.ok) {
-      // Account not verified — redirect to verify page
-      if (res.status === 403 && res.data?.data?.verification_required) {
-        Storage.setPendingEmail(email);
-        Router.verify();
+      if (!email || !password) {
+        showErr(formError, 'Please enter your email and password.');
         return;
       }
-      Validator.showFormError('form-error', res.data?.error || 'Login failed. Try again.');
-      return;
-    }
 
-    // Success
-    const { token, user } = res.data.data;
-    Storage.setToken(token);
-    Storage.setUser(user);
-    Router.dashboard();
+      setLoading(loginBtn, true, 'Checking…');
+      hideErr(formError);
+
+      const res = await AuthApi.login(email, password);
+      setLoading(loginBtn, false, 'Sign In');
+
+      if (!res.ok) {
+        if (res.data?.data?.verification_required) {
+          Storage.setPendingEmail(email);
+          window.location.href = 'verify.html';
+          return;
+        }
+        showErr(formError, res.data?.error || 'Invalid email or password.');
+        return;
+      }
+
+      /* OTP sent — show step 2 */
+      pendingEmail = res.data.data?.email || email;
+      Storage.setPendingEmail(pendingEmail);
+      if (otpEmailEl) otpEmailEl.textContent = pendingEmail;
+      loginFormWrap.classList.add('hidden');
+      otpFormWrap.classList.remove('hidden');
+      document.getElementById('otp-code')?.focus();
+    });
+
+  /* ── Step 2: Submit OTP ── */
+  document.getElementById('otp-form')
+    ?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = document.getElementById('otp-code').value.trim();
+
+      if (!code || code.length < 6) {
+        showErr(otpError, 'Enter the 6-digit code from your email.');
+        return;
+      }
+
+      setLoading(otpBtn, true, 'Verifying…');
+      hideErr(otpError);
+
+      const res = await AuthApi.loginVerify(pendingEmail, code);
+      setLoading(otpBtn, false, 'Verify & Sign In');
+
+      if (!res.ok) {
+        showErr(otpError, res.data?.error || 'Invalid or expired code.');
+        return;
+      }
+
+      Storage.setToken(res.data.data.token);
+      Storage.setUser(res.data.data.user);
+      Storage.clearPendingEmail();
+      Router.dashboard();
+    });
+
+  /* ── Resend OTP ── */
+  resendBtn?.addEventListener('click', async () => {
+    resendBtn.disabled    = true;
+    resendBtn.textContent = 'Sending…';
+    await AuthApi.loginResend(pendingEmail);
+    resendBtn.textContent = 'Code resent! ✅';
+    setTimeout(() => {
+      resendBtn.disabled    = false;
+      resendBtn.textContent = 'Resend code';
+    }, 30000);
   });
 
+  /* ── Back to step 1 ── */
+  document.getElementById('back-to-login')
+    ?.addEventListener('click', () => {
+      otpFormWrap.classList.add('hidden');
+      loginFormWrap.classList.remove('hidden');
+      hideErr(otpError);
+    });
 });
+
+function setLoading(btn, on, label) {
+  if (!btn) return;
+  btn.disabled = on;
+  const text   = btn.querySelector('.btn-text');
+  const loader = btn.querySelector('.btn-loader');
+  if (text)   { text.classList.toggle('hidden', on); if (!on && label) text.textContent = label; }
+  if (loader) loader.classList.toggle('hidden', !on);
+}
+function showErr(el, msg) { if (el) { el.textContent = msg; el.classList.remove('hidden'); } }
+function hideErr(el)      { if (el) { el.textContent = ''; el.classList.add('hidden'); } }
+                       

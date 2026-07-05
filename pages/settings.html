@@ -9,45 +9,34 @@
   <link rel="stylesheet" href="../css/pages.css"/>
   <script src="../js/utils/storage.js"></script>
   <script>
-    /* Apply theme immediately before page renders to avoid flash */
     (function() {
-      const raw = localStorage.getItem('lw_user');
       try {
-        const user = raw ? JSON.parse(raw) : null;
-        const theme = user?.theme || 'dark';
-        if (theme === 'light') {
-          document.documentElement.setAttribute('data-theme', 'light');
-        } else if (theme === 'system') {
-          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-        }
+        const user  = JSON.parse(localStorage.getItem('lw_user') || '{}');
+        const theme = user.theme || 'dark';
+        if (theme === 'light') document.documentElement.setAttribute('data-theme','light');
+        else if (theme === 'system' && !window.matchMedia('(prefers-color-scheme: dark)').matches)
+          document.documentElement.setAttribute('data-theme','light');
       } catch(e) {}
     })();
   </script>
 </head>
 <body>
-
   <div class="sidebar" id="sidebar"></div>
-
   <div class="main-content">
     <div class="page-header">
       <h1>Settings</h1>
       <p>Manage your preferences and account security.</p>
     </div>
-
     <div class="page-content">
       <div class="settings-grid">
 
         <!-- Profile card -->
         <div class="profile-card">
           <div class="profile-avatar" id="profile-avatar">U</div>
-<img id="profile-avatar-img" src="" alt="Avatar"
-  style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--border);display:none;"/>
           <div class="profile-name"  id="profile-name">—</div>
           <div class="profile-email" id="profile-email">—</div>
           <span class="profile-tier-badge tier-free" id="profile-tier-badge">Free</span>
-          <a href="upgrade.html" class="btn-secondary btn-full"
-             style="margin-top:16px;">⭐ Upgrade Plan</a>
+          <a href="upgrade.html" class="btn-secondary btn-full" style="margin-top:16px;">⭐ Upgrade Plan</a>
         </div>
 
         <!-- Settings panels -->
@@ -56,19 +45,16 @@
           <!-- Appearance -->
           <div class="settings-panel">
             <h3>Appearance</h3>
-            <p class="panel-desc">Choose how LabWise looks on your device.</p>
-            <div class="theme-options" id="theme-options">
+            <p class="panel-desc">Choose how LabWise looks.</p>
+            <div class="theme-options">
               <div class="theme-option active" data-theme="dark">
-                <div class="theme-option-icon">🌙</div>
-                Dark
+                <div class="theme-option-icon">🌙</div>Dark
               </div>
               <div class="theme-option" data-theme="light">
-                <div class="theme-option-icon">☀️</div>
-                Light
+                <div class="theme-option-icon">☀️</div>Light
               </div>
               <div class="theme-option" data-theme="system">
-                <div class="theme-option-icon">🖥️</div>
-                System
+                <div class="theme-option-icon">🖥️</div>System
               </div>
             </div>
           </div>
@@ -76,7 +62,6 @@
           <!-- General -->
           <div class="settings-panel">
             <h3>General</h3>
-            <p class="panel-desc">Login and session preferences.</p>
             <div class="settings-row">
               <div class="settings-row-label">
                 <strong>Auto Login</strong>
@@ -89,49 +74,96 @@
             </div>
           </div>
 
-          <!-- Change email -->
+          <!-- Change Email -->
           <div class="settings-panel">
             <h3>Change Email</h3>
-            <p class="panel-desc">
-              Changing your email will require re-verification.
-            </p>
-            <form id="email-form" novalidate
-                  style="display:flex;flex-direction:column;gap:14px;">
-              <div class="form-group">
-                <label for="new-email">New email address</label>
-                <input type="email" id="new-email"
-                       placeholder="new@example.com" required/>
-              </div>
-              <div id="email-msg" class="hidden"></div>
-              <button type="submit" class="btn-secondary" id="email-btn">
-                Update Email
-              </button>
-            </form>
+            <p class="panel-desc">Requires verification of your current and new email.</p>
+
+            <!-- Step 1 -->
+            <div id="email-step1">
+              <form id="email-step1-form" novalidate style="display:flex;flex-direction:column;gap:12px;">
+                <div class="form-group">
+                  <label>New email address</label>
+                  <input type="email" id="new-email" placeholder="new@example.com" required/>
+                </div>
+                <div id="email-msg" class="hidden"></div>
+                <button type="submit" class="btn-secondary">Send Verification Code →</button>
+              </form>
+            </div>
+
+            <!-- Step 2 -->
+            <div id="email-step2" class="hidden" style="display:flex;flex-direction:column;gap:12px;">
+              <p style="font-size:13px;color:var(--text-muted);">Enter the code sent to your <strong>current</strong> email:</p>
+              <form id="email-step2-form" novalidate style="display:flex;flex-direction:column;gap:12px;">
+                <input type="number" id="email-otp1" placeholder="6-digit code"
+                  style="text-align:center;font-size:22px;letter-spacing:6px;font-family:var(--font-mono);"/>
+                <div id="email-msg2" class="hidden"></div>
+                <button type="submit" class="btn-secondary">Verify Current Email →</button>
+              </form>
+            </div>
+
+            <!-- Step 3 -->
+            <div id="email-step3" class="hidden" style="display:flex;flex-direction:column;gap:12px;">
+              <p style="font-size:13px;color:var(--text-muted);">Enter the code sent to your <strong>new</strong> email:</p>
+              <form id="email-step3-form" novalidate style="display:flex;flex-direction:column;gap:12px;">
+                <input type="number" id="email-otp2" placeholder="6-digit code"
+                  style="text-align:center;font-size:22px;letter-spacing:6px;font-family:var(--font-mono);"/>
+                <div id="email-msg3" class="hidden"></div>
+                <button type="submit" class="btn-secondary">Confirm New Email ✅</button>
+              </form>
+            </div>
           </div>
 
-          <!-- Change password -->
+          <!-- Change Username -->
+          <div class="settings-panel">
+            <h3>Change Username</h3>
+            <p class="panel-desc">A verification code will be sent to your email.</p>
+
+            <div id="username-step1">
+              <form id="username-step1-form" novalidate style="display:flex;flex-direction:column;gap:12px;">
+                <div class="form-group">
+                  <label>New username</label>
+                  <input type="text" id="new-username" placeholder="At least 3 characters" required/>
+                </div>
+                <div id="username-msg" class="hidden"></div>
+                <button type="submit" class="btn-secondary">Send Verification Code →</button>
+              </form>
+            </div>
+
+            <div id="username-step2" class="hidden" style="display:flex;flex-direction:column;gap:12px;">
+              <p style="font-size:13px;color:var(--text-muted);">Enter the code sent to your email:</p>
+              <form id="username-step2-form" novalidate style="display:flex;flex-direction:column;gap:12px;">
+                <input type="number" id="username-otp" placeholder="6-digit code"
+                  style="text-align:center;font-size:22px;letter-spacing:6px;font-family:var(--font-mono);"/>
+                <div id="username-msg2" class="hidden"></div>
+                <button type="submit" class="btn-secondary">Confirm Username ✅</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Change Password -->
           <div class="settings-panel">
             <h3>Change Password</h3>
-            <p class="panel-desc">
-              Use a strong password you don't use elsewhere.
-            </p>
-            <form id="password-form" novalidate
-                  style="display:flex;flex-direction:column;gap:14px;">
-              <div class="form-group">
-                <label for="current-password">Current password</label>
-                <input type="password" id="current-password"
-                       placeholder="••••••••" required/>
-              </div>
-              <div class="form-group">
-                <label for="new-password">New password</label>
-                <input type="password" id="new-password"
-                       placeholder="At least 6 characters" required/>
-              </div>
-              <div id="password-msg" class="hidden"></div>
-              <button type="submit" class="btn-secondary" id="password-btn">
-                Update Password
-              </button>
-            </form>
+            <p class="panel-desc">A verification code will be sent to your email first.</p>
+
+            <div id="password-step1">
+              <div id="password-msg" class="hidden" style="margin-bottom:10px;"></div>
+              <button class="btn-secondary" id="password-step1-btn">Send Verification Code →</button>
+            </div>
+
+            <div id="password-step2" class="hidden" style="display:flex;flex-direction:column;gap:12px;">
+              <p style="font-size:13px;color:var(--text-muted);">Enter the code sent to your email + your new password:</p>
+              <form id="password-step2-form" novalidate style="display:flex;flex-direction:column;gap:12px;">
+                <input type="number" id="password-otp" placeholder="6-digit code"
+                  style="text-align:center;font-size:22px;letter-spacing:6px;font-family:var(--font-mono);"/>
+                <div class="form-group">
+                  <label>New password</label>
+                  <input type="password" id="new-password" placeholder="At least 6 characters" required/>
+                </div>
+                <div id="password-msg2" class="hidden"></div>
+                <button type="submit" class="btn-secondary">Update Password ✅</button>
+              </form>
+            </div>
           </div>
 
         </div>
@@ -147,3 +179,4 @@
   <script src="../js/ui/settings.js"></script>
 </body>
 </html>
+  

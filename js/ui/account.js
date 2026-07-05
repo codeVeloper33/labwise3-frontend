@@ -16,23 +16,76 @@ document.addEventListener('DOMContentLoaded', async () => {
   const user     = meRes.data.data.user;
   const tierInfo = meRes.data.data.tier_info;
 
-  /* Update stored user */
   Storage.setUser(user);
 
-  /* ── Profile card ── */
-  const initial = (user.username || 'U').charAt(0).toUpperCase();
-  setText('profile-avatar',     initial);
-  setText('profile-name',       user.username);
-  setText('profile-email',      user.email);
+  /* ── Profile avatar ── */
+  loadAvatar(user);
 
-  const tierNames = { free:'Free', tier1:'Tier 1 — Basic', tier2:'Tier 2 — Standard', tier3:'Tier 3 — Premium' };
+  /* ── Avatar upload ── */
+  const editBtn    = document.getElementById('avatar-edit-btn');
+  const fileInput  = document.getElementById('avatar-input');
+  const avatarMsg  = document.getElementById('avatar-msg');
+
+  editBtn?.addEventListener('click', () => fileInput?.click());
+
+  fileInput?.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      avatarMsg.textContent = '❌ File too large. Max 2MB.';
+      return;
+    }
+
+    avatarMsg.textContent = '⏳ Uploading...';
+
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    const token = Storage.getToken();
+    const res = await fetch('https://codeveloper.pythonanywhere.com/api/users/me/avatar', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      avatarMsg.textContent = `❌ ${data.error || 'Upload failed'}`;
+      return;
+    }
+
+    avatarMsg.textContent = '✅ Photo updated!';
+    const avatarUrl = data.data.avatar_url;
+
+    /* Update localStorage */
+    const updatedUser = { ...Storage.getUser(), avatar_url: avatarUrl };
+    Storage.setUser(updatedUser);
+
+    /* Show new avatar */
+    showAvatarImage(avatarUrl);
+
+    /* Update sidebar */
+    Sidebar.refresh();
+
+    setTimeout(() => { avatarMsg.textContent = ''; }, 3000);
+  });
+
+  /* ── Profile card ── */
+  setText('profile-name',   user.username);
+  setText('profile-email',  user.email);
+
+  const tierNames = {
+    free:'Free', tier1:'Tier 1 — Basic',
+    tier2:'Tier 2 — Standard', tier3:'Tier 3 — Premium'
+  };
   const badgeEl = document.getElementById('profile-tier-badge');
   if (badgeEl) {
     badgeEl.textContent = tierNames[user.tier] || 'Free';
     badgeEl.className   = `profile-tier-badge tier-${user.tier || 'free'}`;
   }
 
-  /* Stats */
   setText('stat-joined',         formatDate(user.created_at));
   setText('stat-sessions-month', user.sessions_this_month ?? 0);
   setText('stat-sessions-limit', tierInfo?.sessions_per_month ?? 2);
@@ -82,6 +135,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
+/* ── Avatar helpers ── */
+function loadAvatar(user) {
+  if (user.avatar_url) {
+    showAvatarImage(user.avatar_url);
+  } else {
+    const initial = (user.username || 'U').charAt(0).toUpperCase();
+    setText('profile-avatar', initial);
+  }
+}
+
+function showAvatarImage(url) {
+  const img     = document.getElementById('profile-avatar-img');
+  const initial = document.getElementById('profile-avatar');
+  if (img) {
+    img.src = url;
+    img.classList.remove('hidden');
+  }
+  if (initial) initial.classList.add('hidden');
+}
+
 function setText(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val ?? '';
@@ -93,4 +166,4 @@ function formatDate(iso) {
   if (!iso) return '—';
   return new Date(iso).toLocaleDateString('en-GB',
     { day:'2-digit', month:'short', year:'numeric' });
-}
+          }

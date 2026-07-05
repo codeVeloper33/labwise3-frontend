@@ -16,10 +16,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   setText('greeting-sub', "Here's what's happening in your lab today.");
   setText('stat-tier',    tierLabel(user.tier || 'free'));
 
-  /* Avatar initial */
-  const avatar = document.getElementById('topbar-avatar');
-  if (avatar) avatar.textContent = (user.username || 'U').charAt(0).toUpperCase();
-
+  /* Avatar */
+const avatar = document.getElementById('topbar-avatar');
+if (avatar) {
+  if (user.avatar_url) {
+    avatar.innerHTML = `<img src="${user.avatar_url}" alt="Avatar"
+      style="width:32px;height:32px;border-radius:50%;object-fit:cover;"/>`;
+  } else {
+    avatar.textContent = (user.username || 'U').charAt(0).toUpperCase();
+  }
+}
   /* ── Load experiments + sessions in parallel ── */
   const [expRes, sessRes] = await Promise.all([
     ExperimentApi.listExperiments(),

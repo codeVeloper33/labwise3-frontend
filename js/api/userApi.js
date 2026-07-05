@@ -10,10 +10,7 @@ const UserApi = (() => {
     const token = Storage.getToken();
     const opts  = {
       method,
-      headers: {
-        'Content-Type':  'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
     };
     if (body) opts.body = JSON.stringify(body);
     try {
@@ -29,6 +26,7 @@ const UserApi = (() => {
   async function getMySessions() { return _req('GET',  '/me/sessions'); }
   async function updateSettings(payload) { return _req('PUT', '/me/settings', payload); }
 
+  /* ── Avatar ── */
   async function uploadAvatar(file) {
     const token    = Storage.getToken();
     const formData = new FormData();
@@ -46,6 +44,25 @@ const UserApi = (() => {
     }
   }
 
-  return { getMe, getMySessions, updateSettings, uploadAvatar };
+  /* ── Change email ── */
+  async function changeEmailStart(newEmail)  { return _req('POST', '/me/change-email/start',   { new_email: newEmail }); }
+  async function changeEmailVerify(code)     { return _req('POST', '/me/change-email/verify',  { code }); }
+  async function changeEmailConfirm(code)    { return _req('POST', '/me/change-email/confirm', { code }); }
+
+  /* ── Change username ── */
+  async function changeUsernameStart(newUsername) { return _req('POST', '/me/change-username/start',   { new_username: newUsername }); }
+  async function changeUsernameConfirm(code)      { return _req('POST', '/me/change-username/confirm', { code }); }
+
+  /* ── Change password ── */
+  async function changePasswordStart()              { return _req('POST', '/me/change-password/start',   {}); }
+  async function changePasswordConfirm(code, newPw) { return _req('POST', '/me/change-password/confirm', { code, new_password: newPw }); }
+
+  return {
+    getMe, getMySessions, updateSettings, uploadAvatar,
+    changeEmailStart, changeEmailVerify, changeEmailConfirm,
+    changeUsernameStart, changeUsernameConfirm,
+    changePasswordStart, changePasswordConfirm,
+  };
 
 })();
+                 

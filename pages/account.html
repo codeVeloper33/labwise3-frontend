@@ -7,6 +7,49 @@
   <link rel="stylesheet" href="../css/global.css"/>
   <link rel="stylesheet" href="../css/sidebar.css"/>
   <link rel="stylesheet" href="../css/pages.css"/>
+  <script src="../js/utils/storage.js"></script>
+  <script>
+    (function() {
+      const raw = localStorage.getItem('lw_user');
+      try {
+        const user = raw ? JSON.parse(raw) : null;
+        const theme = user?.theme || 'dark';
+        if (theme === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        } else if (theme === 'system') {
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        }
+      } catch(e) {}
+    })();
+  </script>
+  <style>
+    .profile-avatar-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    .profile-avatar-img {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--border);
+    }
+    .avatar-edit-btn {
+      position: absolute;
+      bottom: 0; right: 0;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 26px; height: 26px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #avatar-input { display: none; }
+    .avatar-msg { font-size: 12px; margin-top: 6px; min-height: 16px; }
+  </style>
 </head>
 <body>
 
@@ -23,7 +66,13 @@
 
         <!-- Profile card -->
         <div class="profile-card">
-          <div class="profile-avatar" id="profile-avatar">U</div>
+          <div class="profile-avatar-wrap">
+            <img src="" alt="Avatar" class="profile-avatar-img hidden" id="profile-avatar-img"/>
+            <div class="profile-avatar" id="profile-avatar">U</div>
+            <button class="avatar-edit-btn" id="avatar-edit-btn" title="Change photo">✏️</button>
+            <input type="file" id="avatar-input" accept="image/*"/>
+          </div>
+          <div class="avatar-msg text-muted" id="avatar-msg"></div>
           <div class="profile-name"  id="profile-name">—</div>
           <div class="profile-email" id="profile-email">—</div>
           <span class="profile-tier-badge tier-free" id="profile-tier-badge">Free</span>
@@ -113,13 +162,12 @@
     </div>
   </div>
 
-  <script src="../js/utils/storage.js"></script>
-  <script>Storage.applyTheme();</script>
   <script src="../js/utils/router.js"></script>
+  <script src="../js/utils/validator.js"></script>
   <script src="../js/api/authApi.js"></script>
   <script src="../js/api/userApi.js"></script>
   <script src="../js/api/experimentApi.js"></script>
   <script src="../js/ui/sidebar.js"></script>
   <script src="../js/ui/account.js"></script>
 </body>
-</html>
+</html> 

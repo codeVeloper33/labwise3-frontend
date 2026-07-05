@@ -1,35 +1,51 @@
 /* ============================================================
    LabWise — userApi.js
-   HTTP calls to /api/users/*
    ============================================================ */
 
 const UserApi = (() => {
 
   const BASE = 'https://codeveloper.pythonanywhere.com/api/users';
 
-  function _headers() {
-    return {
-      'Content-Type':  'application/json',
-      'Authorization': `Bearer ${Storage.getToken()}`
-    };
-  }
-
   async function _req(method, path, body) {
+    const token = Storage.getToken();
+    const opts  = {
+      method,
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    };
+    if (body) opts.body = JSON.stringify(body);
     try {
-      const opts = { method, headers: _headers() };
-      if (body) opts.body = JSON.stringify(body);
-      const res  = await fetch(`${BASE}${path}`, opts);
+      const res  = await fetch(BASE + path, opts);
       const data = await res.json();
       return { ok: res.ok, status: res.status, data };
-    } catch {
-      return { ok: false, status: 0, data: { error: 'Network error.' } };
+    } catch (e) {
+      return { ok: false, status: 0, data: { error: 'Network error' } };
     }
   }
 
-  const getMe         = ()       => _req('GET', '/me');
-  const getMySessions = ()       => _req('GET', '/me/sessions');
-  const updateSettings = (body)  => _req('PUT', '/me/settings', body);
+  async function getMe()         { return _req('GET',  '/me'); }
+  async function getMySessions() { return _req('GET',  '/me/sessions'); }
+  async function updateSettings(payload) { return _req('PUT', '/me/settings', payload); }
 
-  return { getMe, getMySessions, updateSettings };
+  async function uploadAvatar(file) {
+    const token    = Storage.getToken();
+    const formData = new FormData();
+    formData.append('avatar', file);
+    try {
+      const res  = await fetch(BASE + '/me/avatar', {
+        method:  'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body:    formData,
+      });
+      const data = await res.json();
+      return { ok: res.ok, status: res.status, data };
+    } catch (e) {
+      return { ok: false, status: 0, data: { error: 'Network error' } };
+    }
+  }
+
+  return { getMe, getMySessions, updateSettings, uploadAvatar };
 
 })();

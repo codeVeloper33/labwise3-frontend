@@ -503,38 +503,173 @@
       transform: translateY(-2px);
     }
 
-    /* ── Footer Enhancement ── */
+    /* ── Enhanced Professional Footer ── */
     .landing-footer {
-      padding: 40px 60px;
-      text-align: center;
+      background: var(--bg-dark);
       border-top: 1px solid var(--border-color);
+      padding: 60px 60px 30px;
+    }
+
+    .footer-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .footer-brand {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 10px;
-      margin-bottom: 8px;
     }
 
     .footer-brand-icon {
-      font-size: 24px;
+      font-size: 28px;
+      filter: drop-shadow(0 0 8px rgba(79, 70, 229, 0.3));
     }
 
     .footer-brand-name {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
-      color: white;
-      background: transperent;
+      background: linear-gradient(135deg, var(--primary-light), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+    }
+
+    .footer-description {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 320px;
+    }
+
+    .footer-social-links {
+      display: flex;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .footer-social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 18px;
+      transition: var(--transition);
+    }
+
+    .footer-social-link:hover {
+      background: rgba(79, 70, 229, 0.15);
+      border-color: var(--primary);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    .footer-column h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-column ul li a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .footer-column ul li a:hover {
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    .footer-column ul li a .arrow {
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .footer-column ul li a:hover .arrow {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
     .footer-copy {
       font-size: 13px;
       color: var(--text-muted);
-      margin-top: 8px;
+    }
+
+    .footer-legal-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-legal-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-legal-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .footer-payment-methods {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .footer-payment-method {
+      padding: 4px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.5px;
     }
 
     /* ── Responsive ── */
@@ -555,6 +690,11 @@
 
       .landing-nav-links {
         display: none;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
       }
     }
 
@@ -586,8 +726,27 @@
         font-size: 24px;
       }
 
-      .landing-footer {
-        padding: 24px 20px;
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        padding: 0 20px;
+        gap: 24px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 20px 0;
+      }
+
+      .footer-legal-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .footer-payment-methods {
+        flex-wrap: wrap;
+        justify-content: center;
       }
     }
 
@@ -634,6 +793,29 @@
       .cta-btn-primary,
       .cta-btn-secondary {
         width: 100%;
+        justify-content: center;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 0 16px;
+      }
+
+      .footer-brand-section {
+        align-items: center;
+        text-align: center;
+      }
+
+      .footer-description {
+        max-width: 100%;
+      }
+
+      .footer-column {
+        text-align: center;
+      }
+
+      .footer-column ul li a {
         justify-content: center;
       }
     }
@@ -959,16 +1141,85 @@
     </div>
   </section>
 
-  <!-- ── Footer ── -->
+  <!-- ── Enhanced Professional Footer ── -->
   <footer class="landing-footer">
-    <div class="footer-brand">
-      <span class="footer-brand-icon">⚗️</span>
-      <span class="footer-brand-name">LabWise</span>
+    <div class="footer-grid">
+      <!-- Brand Column -->
+      <div class="footer-brand-section">
+        <div class="footer-brand">
+          <span class="footer-brand-icon">⚗️</span>
+          <span class="footer-brand-name">LabWise</span>
+        </div>
+        <p class="footer-description">
+          Virtual Physics Laboratory for Nigerian secondary school students.
+          Practice WAEC/NECO practicals online with real simulations.
+        </p>
+        <div class="footer-social-links">
+          <a href="#" class="footer-social-link" aria-label="Facebook">📘</a>
+          <a href="#" class="footer-social-link" aria-label="Twitter">🐦</a>
+          <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+          <a href="#" class="footer-social-link" aria-label="YouTube">▶️</a>
+          <a href="#" class="footer-social-link" aria-label="LinkedIn">💼</a>
+        </div>
+      </div>
+
+      <!-- Product Column -->
+      <div class="footer-column">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#features">Features <span class="arrow">→</span></a></li>
+          <li><a href="#experiments">Experiments <span class="arrow">→</span></a></li>
+          <li><a href="#pricing">Pricing <span class="arrow">→</span></a></li>
+          <li><a href="#">Changelog <span class="arrow">→</span></a></li>
+          <li><a href="#">Roadmap <span class="arrow">→</span></a></li>
+        </ul>
+      </div>
+
+      <!-- Support Column -->
+      <div class="footer-column">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center <span class="arrow">→</span></a></li>
+          <li><a href="#">Documentation <span class="arrow">→</span></a></li>
+          <li><a href="https://wa.me/2348025333751">Contact Us <span class="arrow">→</span></a></li>
+          <li><a href="#">Report Bug <span class="arrow">→</span></a></li>
+          <li><a href="#">Feedback <span class="arrow">→</span></a></li>
+        </ul>
+      </div>
+
+      <!-- Company Column -->
+      <div class="footer-column">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us <span class="arrow">→</span></a></li>
+          <li><a href="#">Blog <span class="arrow">→</span></a></li>
+          <li><a href="#">Careers <span class="arrow">→</span></a></li>
+          <li><a href="#">Partners <span class="arrow">→</span></a></li>
+          <li><a href="#">Press Kit <span class="arrow">→</span></a></li>
+        </ul>
+      </div>
     </div>
-    <p style="font-size:13px;color:var(--text-muted);">
-      Virtual Physics Laboratory for Nigerian Students
-    </p>
-    <p class="footer-copy">© 2026 LabWise. Built for WAEC &amp; NECO students built by codeVeloper</p>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-copy">
+        © 2026 LabWise. Built for WAEC &amp; NECO students by codeVeloper
+      </div>
+      
+      <div class="footer-legal-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">GDPR</a>
+      </div>
+
+      <div class="footer-payment-methods">
+        <span class="footer-payment-method">💳 Visa</span>
+        <span class="footer-payment-method">💳 Mastercard</span>
+        <span class="footer-payment-method">🇳🇬 Paystack</span>
+        <span class="footer-payment-method">🇳🇬 Flutterwave</span>
+      </div>
+    </div>
   </footer>
 
   <!-- ── Additional JavaScript ── -->

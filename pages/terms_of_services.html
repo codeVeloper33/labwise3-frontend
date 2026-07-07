@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terms of Service — LabWise</title>
+  <meta name="description" content="Terms of Service for LabWise Virtual Physics Laboratory"/>
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="stylesheet" href="../css/global.css"/>
+  <link rel="stylesheet" href="../css/landing.css"/>
+  
+  <style>
+    /* ── Legal Page Styles ── */
+    .legal-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 120px 60px 80px;
+      background: var(--bg-dark);
+      min-height: 100vh;
+    }
+
+    .legal-header {
+      margin-bottom: 48px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 24px;
+    }
+
+    .legal-header h1 {
+      font-size: 40px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary-light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .legal-header .last-updated {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .legal-section {
+      margin-bottom: 40px;
+    }
+
+    .legal-section h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .legal-section h2 .section-number {
+      color: var(--primary-light);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .legal-section p, .legal-section li {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+
+    .legal-section ul, .legal-section ol {
+      padding-left: 24px;
+      margin-bottom: 16px;
+    }
+
+    .legal-section ul li, .legal-section ol li {
+      margin-bottom: 8px;
+    }
+
+    .legal-section .highlight-box {
+      background: rgba(79, 70, 229, 0.08);
+      border-left: 3px solid var(--primary);
+      padding: 20px 24px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+    }
+
+    .legal-section .highlight-box p {
+      margin-bottom: 0;
+    }
+
+    .legal-nav {
+      position: sticky;
+      top: 80px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+    }
+
+    .legal-nav h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .legal-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 16px;
+    }
+
+    .legal-nav ul li a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legal-nav ul li a:hover {
+      color: var(--text-primary);
+    }
+
+    .legal-nav ul li a .arrow {
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .legal-nav ul li a:hover .arrow {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+
+    .back-to-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: var(--transition);
+      margin-top: 40px;
+    }
+
+    .back-to-home:hover {
+      color: var(--text-primary);
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .legal-page {
+        padding: 100px 24px 60px;
+      }
+
+      .legal-header h1 {
+        font-size: 28px;
+      }
+
+      .legal-nav ul {
+        grid-template-columns: 1fr;
+      }
+
+      .legal-section h2 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .legal-page {
+        padding: 80px 16px 40px;
+      }
+
+      .legal-header h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body class="landing-body">
+
+  <!-- ── Navbar ── -->
+  <nav class="landing-nav" id="navbar">
+    <a href="index.html" class="landing-nav-brand">
+      <span class="landing-nav-brand-icon">⚗️</span>
+      <span class="landing-nav-brand-name">LabWise</span>
+    </a>
+
+    <div class="landing-nav-links">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#experiments">Experiments</a>
+      <a href="index.html#pricing">Pricing</a>
+    </div>
+
+    <div class="landing-nav-actions">
+      <a href="login.html" class="btn-text-link">Log in</a>
+      <a href="signup.html" class="btn-primary">Get Started Free</a>
+    </div>
+  </nav>
+
+  <!-- ── Terms of Service Content ── -->
+  <main class="legal-page">
+    <div class="legal-header">
+      <h1>Terms of Service</h1>
+      <p class="last-updated">Last Updated: January 15, 2026</p>
+    </div>
+
+    <!-- Quick Navigation -->
+    <nav class="legal-nav">
+      <h3>Quick Navigation</h3>
+      <ul>
+        <li><a href="#section-1">1. Acceptance <span class="arrow">→</span></a></li>
+        <li><a href="#section-2">2. Definitions <span class="arrow">→</span></a></li>
+        <li><a href="#section-3">3. Account Registration <span class="arrow">→</span></a></li>
+        <li><a href="#section-4">4. Service Usage <span class="arrow">→</span></a></li>
+        <li><a href="#section-5">5. Subscription Plans <span class="arrow">→</span></a></li>
+        <li><a href="#section-6">6. User Content <span class="arrow">→</span></a></li>
+        <li><a href="#section-7">7. Intellectual Property <span class="arrow">→</span></a></li>
+        <li><a href="#section-8">8. Refund Policy <span class="arrow">→</span></a></li>
+        <li><a href="#section-9">9. Data Privacy <span class="arrow">→</span></a></li>
+        <li><a href="#section-10">10. Security <span class="arrow">→</span></a></li>
+        <li><a href="#section-11">11. Prohibited Activities <span class="arrow">→</span></a></li>
+        <li><a href="#section-12">12. Termination <span class="arrow">→</span></a></li>
+        <li><a href="#section-13">13. Disclaimer <span class="arrow">→</span></a></li>
+        <li><a href="#section-14">14. Limitation of Liability <span class="arrow">→</span></a></li>
+        <li><a href="#section-15">15. Governing Law <span class="arrow">→</span></a></li>
+        <li><a href="#section-16">16. Changes to Terms <span class="arrow">→</span></a></li>
+        <li><a href="#section-17">17. Contact Information <span class="arrow">→</span></a></li>
+      </ul>
+    </nav>
+
+    <!-- Section 1 -->
+    <section class="legal-section" id="section-1">
+      <h2><span class="section-number">1.</span> Acceptance of Terms</h2>
+      <p>By accessing or using LabWise ("the Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use the Service. These Terms constitute a legally binding agreement between you and LabWise.</p>
+      <div class="highlight-box">
+        <p><strong>⚠️ Important:</strong> By using LabWise, you confirm that you are at least 13 years old. If you are under 18, you must have parental or guardian consent to use this Service.</p>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="legal-section" id="section-2">
+      <h2><span class="section-number">2.</span> Definitions</h2>
+      <ul>
+        <li><strong>"LabWise"</strong> refers to the virtual physics laboratory platform, including all content, features, and functionality.</li>
+        <li><strong>"User"</strong> refers to any individual who creates an account or uses the Service.</li>
+        <li><strong>"Experiments"</strong> refers to the physics practical simulations including Simple Pendulum, Hooke's Law, and Principle of Moments.</li>
+        <li><strong>"Subscription"</strong> refers to the paid tier plans (Tier 1, Tier 2, Tier 3) that provide access to additional features.</li>
+        <li><strong>"Content"</strong> includes all data, text, graphics, reports, and materials generated through the Service.</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="legal-section" id="section-3">
+      <h2><span class="section-number">3.</span> Account Registration</h2>
+      <ol>
+        <li>You must provide accurate, complete, and current information when creating an account.</li>
+        <li>You are solely responsible for maintaining the confidentiality of your account credentials.</li>
+        <li>You agree to notify us immediately of any unauthorized use of your account.</li>
+        <li>Each user may only create one account. Multiple accounts for the same individual are prohibited.</li>
+        <li>We reserve the right to suspend or terminate accounts that violate these Terms.</li>
+      </ol>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="legal-section" id="section-4">
+      <h2><span class="section-number">4.</span> Service Usage</h2>
+      <p>LabWise provides virtual physics laboratory simulations for educational purposes. You may use the Service to:</p>
+      <ul>
+        <li>Conduct physics experiments virtually</li>
+        <li>Generate data tables and graphs</li>
+        <li>Create WAEC-style practical reports</li>
+        <li>Practice for physics practical examinations</li>
+        <li>Export reports and data (available in paid tiers)</li>
+      </ul>
+      <p>The Service is designed for Nigerian secondary school students preparing for WAEC and NECO examinations, but may be used by anyone seeking to learn physics practicals.</p>
+    </section>
+
+    <!-- Section 5 -->
+    <section class="legal-section" id="section-5">
+      <h2><span class="section-number">5.</span> Subscription Plans and Payments</h2>
+      <ol>
+        <li><strong>Free Plan:</strong> Includes access to Simple Pendulum experiment only, with limited trials and sessions.</li>
+        <li><strong>Tier 1 (Basic):</strong> ₦500/month - Includes all 3 experiments, 5 trials per session, and basic reports.</li>
+        <li><strong>Tier 2 (Standard):</strong> ₦1,500/month - Includes all 3 experiments, 8 trials per session, and full reports.</li>
+        <li><strong>Tier 3 (Premium):</strong> ₦3,000/month - Includes all 3 experiments, unlimited trials, full reports, and PDF export.</li>
+        <li>All subscription fees are in Nigerian Naira (₦) and are non-refundable unless otherwise stated.</li>
+        <li>Subscription fees are subject to change with 30 days' notice.</li>
+        <li>Payments are processed through secure third-party payment processors (Paystack, Flutterwave).</li>
+      </ol>
+    </section>
+
+    <!-- Section 6 -->
+    <section class="legal-section" id="section-6">
+      <h2><span class="section-number">6.</span> User Content</h2>
+      <p>You retain ownership of all data and content you generate using LabWise, including:</p>
+      <ul>
+        <li>Experiment data and measurements</li>
+        <li>Graphs and plots</li>
+        <li>Reports and calculations</li>
+      </ul>
+      <p>By using the Service, you grant LabWise a non-exclusive, royalty-free license to store, process, and display your content for the purpose of providing the Service.</p>
+    </section>
+
+    <!-- Section 7 -->
+    <section class="legal-section" id="section-7">
+      <h2><span class="section-number">7.</span> Intellectual Property</h2>
+      <ol>
+        <li>The LabWise platform, including all code, designs, simulations, and graphics, is the intellectual property of LabWise.</li>
+        <li>You may not copy, modify, distribute, or create derivative works of the platform without explicit permission.</li>
+        <li>All physics formulas, simulations, and experiment designs are original creations of LabWise.</li>
+        <li>LabWise may use your anonymized data for research and improvement purposes.</li>
+      </ol>
+    </section>
+
+    <!-- Section 8 -->
+    <section class="legal-section" id="section-8">
+      <h2><span class="section-number">8.</span> Refund Policy</h2>
+      <ul>
+        <li>Subscription fees are non-refundable once paid.</li>
+        <li>If you experience technical issues preventing normal use, we may offer a credit or refund at our discretion.</li>
+        <li>Free trial users are not eligible for refunds.</li>
+        <li>To request a refund, contact us at <a href="mailto:support@labwise.ng" style="color:var(--primary-light);">support@labwise.ng</a> with your account details and reason.</li>
+      </ul>
+    </section>
+
+    <!-- Section 9 -->
+    <section class="legal-section" id="section-9">
+      <h2><span class="section-number">9.</span> Data Privacy</h2>
+      <p>Your privacy is important to us. We collect and process personal data in accordance with our <a href="privacy-policy.html" style="color:var(--primary-light);">Privacy Policy</a>. Key points:</p>
+      <ul>
+        <li>We collect basic account information (name, email, school).</li>
+        <li>We store experiment data and activity logs.</li>
+        <li>We use cookies for authentication and analytics.</li>
+        <li>We do not sell your data to third parties.</li>
+        <li>You may request data deletion at any time.</li>
+      </ul>
+      <div class="highlight-box">
+        <p><strong>🇳🇬 Nigerian Students:</strong> We comply with the Nigeria Data Protection Regulation (NDPR) 2019.</p>
+      </div>
+    </section>
+
+    <!-- Section 10 -->
+    <section class="legal-section" id="section-10">
+      <h2><span class="section-number">10.</span> Security</h2>
+      <ul>
+        <li>We implement industry-standard security measures to protect your data.</li>
+        <li>All data is encrypted in transit using SSL/TLS.</li>
+        <li>We regularly update our systems to address security vulnerabilities.</li>
+        <li>You are responsible for maintaining the security of your account credentials.</li>
+        <li>Report any security concerns immediately to <a href="mailto:security@labwise.ng" style="color:var(--primary-light);">security@labwise.ng</a>.</li>
+      </ul>
+    </section>
+
+    <!-- Section 11 -->
+    <section class="legal-section" id="section-11">
+      <h2><span class="section-number">11.</span> Prohibited Activities</h2>
+      <p>You may not use the Service for:</p>
+      <ul>
+        <li>Cheating on actual WAEC/NECO examinations</li>
+        <li>Sharing account credentials with others</li>
+        <li>Attempting to bypass subscription restrictions</li>
+        <li>Scraping or collecting data for commercial purposes</li>
+        <li>Uploading malicious code or content</li>
+        <li>Harassing or abusing other users</li>
+        <li>Misrepresenting your identity or qualifications</li>
+      </ul>
+    </section>
+
+    <!-- Section 12 -->
+    <section class="legal-section" id="section-12">
+      <h2><span class="section-number">12.</span> Termination</h2>
+      <p>We reserve the right to suspend or terminate your account if:</p>
+      <ul>
+        <li>You violate these Terms of Service</li>
+        <li>You fail to pay subscription fees</li>
+        <li>You engage in fraudulent or illegal activities</li>
+        <li>Your account remains inactive for more than 12 months</li>
+      </ul>
+      <p>You may cancel your subscription at any time through your account settings or by contacting support.</p>
+    </section>
+
+    <!-- Section 13 -->
+    <section class="legal-section" id="section-13">
+      <h2><span class="section-number">13.</span> Disclaimer</h2>
+      <div class="highlight-box">
+        <p><strong>⚠️ Educational Purpose Only:</strong> LabWise is designed for educational practice and preparation purposes only. While we strive for accuracy, results from simulations are approximations and should not replace actual laboratory experiments or examination materials.</p>
+      </div>
+      <ul>
+        <li>LabWise provides the Service "as is" and "as available."</li>
+        <li>We do not guarantee that the Service will be error-free or uninterrupted.</li>
+        <li>We are not responsible for any inaccuracies in simulation results.</li>
+        <li>LabWise is not affiliated with WAEC, NECO, or any examination board.</li>
+      </ul>
+    </section>
+
+    <!-- Section 14 -->
+    <section class="legal-section" id="section-14">
+      <h2><span class="section-number">14.</span> Limitation of Liability</h2>
+      <p>To the maximum extent permitted by law, LabWise shall not be liable for:</p>
+      <ul>
+        <li>Any indirect, incidental, or consequential damages</li>
+        <li>Loss of data or academic performance</li>
+        <li>Financial losses or lost opportunities</li>
+        <li>Results obtained from using the Service</li>
+      </ul>
+      <p>Our total liability shall not exceed the total amount paid by you for the Service in the preceding 12 months.</p>
+    </section>
+
+    <!-- Section 15 -->
+    <section class="legal-section" id="section-15">
+      <h2><span class="section-number">15.</span> Governing Law</h2>
+      <p>These Terms shall be governed by and construed in accordance with the laws of the Federal Republic of Nigeria. Any disputes shall be resolved in the courts of Lagos State, Nigeria.</p>
+      <p>If you are accessing LabWise from outside Nigeria, you are responsible for complying with your local laws.</p>
+    </section>
+
+    <!-- Section 16 -->
+    <section class="legal-section" id="section-16">
+      <h2><span class="section-number">16.</span> Changes to Terms</h2>
+      <p>We may update these Terms from time to time. We will notify you of significant changes by:</p>
+      <ul>
+        <li>Email notification to your registered address</li>
+        <li>Notice on the LabWise platform</li>
+        <li>Updated "Last Updated" date</li>
+      </ul>
+      <p>Continued use of the Service after changes constitutes acceptance of the updated Terms.</p>
+    </section>
+
+    <!-- Section 17 -->
+    <section class="legal-section" id="section-17">
+      <h2><span class="section-number">17.</span> Contact Information</h2>
+      <p>If you have questions about these Terms, please contact us:</p>
+      <ul style="list-style: none; padding-left: 0;">
+        <li><strong>📧 Email:</strong> <a href="mailto:legal@labwise.ng" style="color:var(--primary-light);">legal@labwise.ng</a></li>
+        <li><strong>📞 Phone:</strong> <a href="tel:+2348025333751" style="color:var(--primary-light);">+234 802 533 3751</a></li>
+        <li><strong>💬 WhatsApp:</strong> <a href="https://wa.me/2348025333751" style="color:var(--primary-light);">Chat with us</a></li>
+        <li><strong>📍 Address:</strong> Lagos, Nigeria</li>
+      </ul>
+    </section>
+
+    <!-- Back to Home -->
+    <a href="index.html" class="back-to-home">← Back to LabWise</a>
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="landing-footer">
+    <div class="footer-grid">
+      <div class="footer-brand-section">
+        <div class="footer-brand">
+          <span class="footer-brand-icon">⚗️</span>
+          <span class="footer-brand-name">LabWise</span>
+        </div>
+        <p class="footer-description">
+          Virtual Physics Laboratory for Nigerian secondary school students.
+        </p>
+      </div>
+
+      <div class="footer-column">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="index.html#features">Features <span class="arrow">→</span></a></li>
+          <li><a href="index.html#experiments">Experiments <span class="arrow">→</span></a></li>
+          <li><a href="index.html#pricing">Pricing <span class="arrow">→</span></a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="terms-of-service.html">Terms of Service <span class="arrow">→</span></a></li>
+          <li><a href="privacy-policy.html">Privacy Policy <span class="arrow">→</span></a></li>
+          <li><a href="cookie-policy.html">Cookie Policy <span class="arrow">→</span></a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="https://wa.me/2348025333751">Contact Us <span class="arrow">→</span></a></li>
+          <li><a href="#">Help Center <span class="arrow">→</span></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 LabWise. All rights reserved.</div>
+      <div class="footer-legal-links">
+        <a href="terms-of-service.html">Terms</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="cookie-policy.html">Cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // Navbar scroll effect
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      }, { passive: true });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const target = document.querySelector(targetId);
+          if (target) {
+            const navHeight = navbar.offsetHeight;
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+
+      // Redirect logged-in users
+      if (typeof Storage !== 'undefined' && Storage.isLoggedIn && Storage.isLoggedIn()) {
+        // Don't redirect for legal pages
+      }
+
+    })();
+  </script>
+
+  <script src="../js/utils/storage.js"></script>
+</body>
+</html>
